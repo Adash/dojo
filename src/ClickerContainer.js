@@ -2,20 +2,24 @@ import React, { Component } from "react";
 import { createStore } from "redux";
 import "./Clicker.css";
 
-let ON = {type:'ON', text: 'whoo'};
-let OFF = {type:'OFF', text: 'whoo'};
+const initialState = {
+  ledClass: 'led-yellow',
+  todos: []
+}
+
+let ON = {type:'ON', text: 'whoo', class: 'led-green'};
+let OFF = {type:'OFF', text: 'whoo', class: 'led-gray'};
 
 function switchLed(state, action){
   if (typeof state === "undefined") {
-    return "led-gray";
+    return initialState;
   }
+
   switch(action.type) {
     case ("ON") :
-      console.log(action.type);
-      return "led-green"
+      return Object.assign({}, state, {ledClass: action.class} )
     case ("OFF") :
-      console.log(action.type);
-      return "led-gray"
+      return Object.assign({}, state, {ledClass: action.class} )
     default:
       return "no state";
   }
@@ -67,7 +71,7 @@ class ClickerContainer extends Component {
 
   render() {
     const { textValue } = this.state;
-    const ledState = store.getState();
+    const ledState = store.getState().ledClass;
     return (
       <div className="ClickerWrapper">
         <div className="col-3">
@@ -79,7 +83,6 @@ class ClickerContainer extends Component {
             onChange={this.handleNewValueChange}
             ref={this.textInput}
           />
-
           <button
             className="btn btn-outline-primary m-2"
             onClick={this.handleClick}
